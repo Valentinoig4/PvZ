@@ -2,8 +2,8 @@
 // Created by vale on 11/26/2025.
 //
 
-#ifndef SEMANA15_CPUZOMBIEOLEADAS_H
-#define SEMANA15_CPUZOMBIEOLEADAS_H
+#ifndef CPUZOMBIEOLEADAS_H
+#define CPUZOMBIEOLEADAS_H
 
 #include <iostream>
 #include <vector>
@@ -25,17 +25,18 @@ public:
 class Zombie {
 protected:
     int vida;
-    int velocidad;
+    double velocidad = 4.7;
+    int danio = 100;
     pair<int,int> pos;
 
 public:
-    Zombie(int v, int vel) : vida(v), velocidad(vel) {}
+    Zombie(int v, double vel) : vida(v), velocidad(vel) {}
 
     virtual ~Zombie() {}
 
     virtual void actuar() = 0;
 
-    virtual void recibirDanio(int d) {
+    void recibirDanio(int d) {
         vida -= d;
         if (vida < 0) vida = 0;
     }
@@ -53,7 +54,7 @@ public:
 
 class ZombieComun : public Zombie {
 public:
-    ZombieComun() : Zombie(50, 1) {}
+    ZombieComun() : Zombie(190, 4.7) {}
 
     void actuar() override {
         cout << "Zombie normal camina hacia la casa.\n";
@@ -64,15 +65,10 @@ public:
 
 class ZombieFortificadoCasco : public Zombie {
 public:
-    ZombieFortificadoCasco() : Zombie(150, 1) {}
+    ZombieFortificadoCasco() : Zombie(1290, 4.7) {}
 
     void actuar() override {
         cout << "Zombie con casco avanza .\n";
-    }
-
-    void recibirDanio(int d) override {
-        vida -= d;
-        if (vida < 0) vida = 0;
     }
 };
 
@@ -80,15 +76,10 @@ public:
 
 class ZombieFortificadoCono : public Zombie {
 public:
-    ZombieFortificadoCono() : Zombie(100, 1) {}
+    ZombieFortificadoCono() : Zombie(560, 100) {}
 
     void actuar() override {
         cout << "Zombie cono avanza\n";
-    }
-
-    void recibirDanio(int d) override {
-        vida -= d;
-        if (vida < 0) vida = 0;
     }
 };
 
@@ -96,10 +87,14 @@ public:
 
 class ZombieAtletico : public Zombie {
 public:
-    ZombieAtletico() : Zombie(80, 3) {}
+    ZombieAtletico() : Zombie(335, 2.5) {}
 
+    void Saltar() {
+        cout << "Zombie atletico salto\n";
+        velocidad = 4.7;
+    }
     void actuar() override {
-        cout << "zombie corredor corre  rápido y salta la primera planta\n";
+        cout << "Zombie atletico avanza rapidamente\n";
     }
 };
 
@@ -107,13 +102,11 @@ public:
 class Oleadas {
 public:
     int numeroOleada;
-    vector<Zombie*> zombies;
 
     Oleadas() : numeroOleada(1) {}
 
     void siguienteOleada() {
         numeroOleada++;
-        zombies.clear();
     }
 };
 
@@ -155,4 +148,4 @@ public:
 
 
 
-#endif //SEMANA15_CPUZOMBIEOLEADAS_H
+#endif //CPUZOMBIEOLEADAS_H
