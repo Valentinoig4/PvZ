@@ -17,7 +17,7 @@ public:
     Mapa(int f = 5, int c = 9) : filas(f), columnas(c) {}
 
     pair<int,int> posAleatoria() {
-        return { rand() % filas, 1 };
+        return { rand() % filas, columnas-1 };
     }
 };
 
@@ -149,3 +149,4 @@ public:
 
 
 #endif //CPUZOMBIEOLEADAS_H
+
