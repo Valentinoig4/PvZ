@@ -129,8 +129,6 @@ public:
         if (plantaCerca && ticksParalizado == 0) Saltar();
         else if (anadirTick(velocidad) && ticksParalizado == 0) pos.second--;
         if (ticksParalizado > 0) ticksParalizado--;
-        
-        }
     }
 };
 
@@ -138,6 +136,7 @@ public:
 
 
 #endif
+
 
 
 
