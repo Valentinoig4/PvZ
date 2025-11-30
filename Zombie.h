@@ -59,7 +59,7 @@ public:
     void setPlantaCerca(bool valor){ plantaCerca = valor; }
 
     bool anadirTick(int demora){
-        if (demora <= 0) return true;
+        if (demora <= 0) return false;
         ticks++;
         return (ticks % demora == 0);
 
@@ -127,6 +127,7 @@ public:
 
 
 #endif
+
 
 
 
