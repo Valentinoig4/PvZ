@@ -19,12 +19,17 @@ public:
     bool plantaCerca = false;
     bool especial = false;
     int ticks = 0;
+    bool congelado = false;
     
 
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
     virtual ~Zombie() {}
 
     virtual void actuar() = 0;
+
+    void setVelocidad(int vel){ velocidad = vel;}
+
+    void setCongelado(bool valor){ congelado = valor;}
 
     void recibirDanio(int d) {
         vida -= d;
@@ -114,6 +119,7 @@ public:
 
 
 #endif
+
 
 
 
