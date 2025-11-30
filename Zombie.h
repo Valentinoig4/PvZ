@@ -20,7 +20,7 @@ public:
     bool especial = false;
     int ticks = 0;
     bool congelado = false;
-    int ticksParalizado = 0
+    int ticksParalizado = 0;
     
 
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
@@ -134,6 +134,7 @@ public:
 
 
 #endif
+
 
 
 
