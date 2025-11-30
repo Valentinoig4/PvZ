@@ -12,7 +12,7 @@ using namespace std;
 class Zombie {
 protected:
     int vida;
-    double velocidad = 4.7;
+    int velocidad = 5;
     int danio = 100;
     pair<int,int> pos;
     bool paralizado = false;
@@ -31,7 +31,9 @@ public:
         if (vida < 0) vida = 0;
     }
 
-    bool estaVivo() { return vida > 0; }
+    bool estaVivo() {
+        return vida > 0; 
+    }
 
     void setPos(pair<int,int> p) { pos = p; }
     pair<int,int> getPos() const { return pos; }
@@ -40,13 +42,20 @@ public:
 
     void setParalizado(bool valor){
         paralizado = valor;
+    }
+
+    bool anadirTick(){
+        if (ticks % velocidad == 0){
+            
+        }
+    }
 
     
 };
 
 class ZombieComun : public Zombie {
 public:
-    ZombieComun() : Zombie(190, 4.7) {}
+    ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
         cout << "Zombie normal camina hacia la casa.\n";
@@ -56,7 +65,7 @@ public:
 
 class ZombieFortificadoCono : public Zombie {
 public:
-    ZombieFortificadoCono() : Zombie(560, 4.7) {}
+    ZombieFortificadoCono() : Zombie(560, 5) {}
 
     void actuar() override {
         cout << "Zombie cono avanza\n";
@@ -66,13 +75,13 @@ public:
 
 class ZombieAtletico : public Zombie {
 public:
-    ZombieAtletico() : Zombie(335, 2.5) {}
+    ZombieAtletico() : Zombie(335, 3) {}
 
     bool saltar = true;
 
     void Saltar() {
         cout << "Zombie atletico salto\n";
-        velocidad = 4.7;
+        velocidad = 5;
         saltar = false;
         pos.first++;
     }
@@ -81,9 +90,6 @@ public:
         cout << "Zombie atletico avanza rapidamente\n";
     }
 };
-
-#endif
-
 
 #endif
 
