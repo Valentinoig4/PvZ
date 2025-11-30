@@ -31,10 +31,18 @@ public:
 
     void setCongelado(bool valor){ congelado = valor;}
 
+    bool getCongelado() const { return congelado; }
+    bool getPlantaCerca() const { return plantaCerca; }
+
+
     void recibirDanio(int d) {
         vida -= d;
         if (vida < 0) vida = 0;
     }
+
+    void operator-=(int d) {
+        vida -= d;
+        if (vida < 0) vida = 0;
 
     bool estaVivo() {
         return vida > 0; 
@@ -65,7 +73,7 @@ public:
     ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && not paralizado) {
+        if (anadirTick(velocidad) && !paralizado) {
             pos.second--;
         }
     }
@@ -77,7 +85,7 @@ public:
     ZombieCubo() : Zombie(1290, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && not paralizado) {
+        if (anadirTick(velocidad) && !paralizado) {
             pos.second--;
         }    }
 };
@@ -88,7 +96,7 @@ public:
     ZombieCono() : Zombie(560, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && not paralizado) {
+        if (anadirTick(velocidad) && !paralizado) {
             pos.second--;
         }    }
 };
@@ -108,8 +116,8 @@ public:
     }
 
     void actuar() override {
-        if (plantaCerca && not paralizado) Saltar();
-        else if (anadirTick(velocidad) && not paralizado) {
+        if (plantaCerca && !paralizado) Saltar();
+        else if (anadirTick(velocidad) && !paralizado) {
             pos.second--;
         }
     }
@@ -119,6 +127,7 @@ public:
 
 
 #endif
+
 
 
 
