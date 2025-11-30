@@ -15,7 +15,6 @@ public:
     int velocidad = 5;
     int danio = 100;
     pair<int,int> pos;
-    bool paralizado = false;
     bool plantaCerca = false;
     bool especial = false;
     int ticks = 0;
@@ -56,10 +55,8 @@ public:
 
     int getVida() const { return vida; }
 
-    void setParalizado(bool valor){ 
-        paralizado = valor;
-        if (valor) ticksParalizado = 4;
-    
+    void setParalizado(int valor){ 
+        ticksParalizado = valor;
     }
 
     void setPlantaCerca(bool valor){ plantaCerca = valor; }
@@ -79,9 +76,10 @@ public:
     ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && !paralizado) {
+        if (anadirTick(velocidad) && ticksParalizado > 0) {
             pos.second--;
         }
+        if (ticksParalizado > 0) ticksParalizado--;
     }
 };
 
@@ -91,9 +89,11 @@ public:
     ZombieCubo() : Zombie(1290, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && !paralizado) {
+        if (anadirTick(velocidad) && ticksParalizado > 0) {
             pos.second--;
-        }    }
+        }    
+        if (ticksParalizado > 0) ticksParalizado--;
+    }
 };
 
 
@@ -102,9 +102,13 @@ public:
     ZombieCono() : Zombie(560, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && !paralizado) {
+        if (anadirTick(velocidad) && ticksParalizado > 0) {
             pos.second--;
-        }    }
+        }
+
+        if (ticksParalizado > 0) ticksParalizado--;
+
+    }
 };
 
 
@@ -123,8 +127,10 @@ public:
 
     void actuar() override {
         if (plantaCerca && !paralizado) Saltar();
-        else if (anadirTick(velocidad) && !paralizado) {
+        else if (anadirTick(velocidad) && ticksParalizado > 0) {
             pos.second--;
+
+        if (ticksParalizado > 0) ticksParalizado--;
         
         }
     }
@@ -134,6 +140,7 @@ public:
 
 
 #endif
+
 
 
 
