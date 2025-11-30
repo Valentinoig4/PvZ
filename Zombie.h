@@ -76,7 +76,7 @@ public:
     ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }
         if (ticksParalizado > 0) ticksParalizado--;
@@ -89,7 +89,7 @@ public:
     ZombieCubo() : Zombie(1290, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }    
         if (ticksParalizado > 0) ticksParalizado--;
@@ -102,7 +102,7 @@ public:
     ZombieCono() : Zombie(560, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }
 
@@ -126,10 +126,8 @@ public:
     }
 
     void actuar() override {
-        if (plantaCerca && !paralizado) Saltar();
-        else if (anadirTick(velocidad) && ticksParalizado > 0) {
-            pos.second--;
-
+        if (plantaCerca && ticksParalizado == 0) Saltar();
+        else if (anadirTick(velocidad) && ticksParalizado == 0) pos.second--;
         if (ticksParalizado > 0) ticksParalizado--;
         
         }
@@ -140,6 +138,7 @@ public:
 
 
 #endif
+
 
 
 
