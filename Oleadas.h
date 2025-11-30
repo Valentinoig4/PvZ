@@ -1,15 +1,23 @@
-#ifndef OLEADAS_H
-#define OLEADAS_H
 
-class Oleadas {
-public:
-    int numeroOleada;
+#ifndef OLEADA_H
+#define OLEADA_H
+#include <utility>
+#include "Zombie.h"
 
-    Oleadas() : numeroOleada(1) {}
-
-    void siguienteOleada() {
-        numeroOleada++;
-    }
+enum class tipoZombie {
+    Comun,
+    Fortificado,
+    Especial
 };
 
-#endif
+class Oleada {
+public:
+    vector<tipoZombie> zombies{};
+    int velocidadDeSpawneo{};
+
+    Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo) : zombies(_zombies), velocidadDeSpawneo(_velocidadDeSpawneo) {};
+
+
+};
+
+#endif //OLEADA_H
