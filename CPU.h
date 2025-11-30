@@ -28,12 +28,12 @@ public:
             return new ZombieComun();
         }
         if (tipo == 1) {
-            cout << "CPU hizo zombie de casco\n";
-            return new ZombieFortificadoCasco();
+            cout << "CPU hizo zombie de cubo\n";
+            return new ZombieCubo();
         }
         if (tipo == 2) {
             cout << "CPU hizo zombie de cono\n";
-            return new ZombieFortificadoCono();
+            return new ZombieCono();
         }
         cout << "CPU hizo Zombie atletico\n";
         return new ZombieAtletico();
