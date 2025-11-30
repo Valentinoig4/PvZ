@@ -43,8 +43,9 @@ public:
     void operator-=(int d) {
         vida -= d;
         if (vida < 0) vida = 0;
+    }
 
-    bool estaVivo() {
+    bool estaVivo() const {
         return vida > 0; 
     }
 
@@ -127,6 +128,7 @@ public:
 
 
 #endif
+
 
 
 
