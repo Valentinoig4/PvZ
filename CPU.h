@@ -10,10 +10,15 @@
 
 class CPU {
 public:
-    Oleada oleada;
+    Oleada oleada{};
     Mapa* mapa{};
 
+    explicit CPU(Mapa* mapa) : mapa(mapa){};
     CPU(Oleada _oleada, Mapa* m) : oleada(std::move(_oleada)), mapa(m) {}
+
+    void añadirOleada(Oleada _oleada) {
+        this->oleada = std::move(_oleada);
+    }
 
     Zombie* generarZombieRandom() {
         int tipo = rand() % 4;
