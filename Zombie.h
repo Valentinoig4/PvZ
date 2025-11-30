@@ -21,7 +21,7 @@ public:
     int ticks = 0;
     
 
-    Zombie(int v, double vel) : vida(v), velocidad(vel) {}
+    Zombie(int v, int vel) : vida(v), velocidad(vel) {}
     virtual ~Zombie() {}
 
     virtual void actuar() = 0;
@@ -43,12 +43,13 @@ public:
 
     void setParalizado(bool valor){ paralizado = valor; }
 
-    void setPlantaCerca(bool valor){ especial = valor; }
+    void setPlantaCerca(bool valor){ PlantaCerca = valor; }
 
     bool anadirTick(int demora){
-        if (ticks % demora == 0){
-            return true;
-        }
+        if (demora <= 0) return true;
+        ticks++;
+        return (ticks % demora == 0);
+
     }
 
     
@@ -90,20 +91,21 @@ public:
 
 class ZombieAtletico : public Zombie {
 public:
-    ZombieAtletico() : Zombie(335, 3) {}
+    ZombieAtletico() : Zombie(335, 3) {
+        especial = true;
+    }
 
-    bool especial = true;
     void Saltar() {
         cout << "Zombie atletico salto\n";
         velocidad = 5;
         especial = false;
-        pos.first--;
+        pos.second--;
     }
 
     void actuar() override {
         if (PlantaCerca && not paralizado) Saltar();
         else if (anadirTick(velocidad) && not paralizado) {
-            pos.first--;
+            pos.second--;
         }
     }
 };
@@ -112,6 +114,7 @@ public:
 
 
 #endif
+
 
 
 
