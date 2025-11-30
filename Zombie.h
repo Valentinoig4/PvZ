@@ -1,26 +1,26 @@
 //
-// Created by vale on 11/26/2025.
+// Created by fvale on 11/30/2025.
 //
 
-#ifndef ZOMBIE_H
-#define ZOMBIE_H
+#ifndef ZOMBIES_H
+#define ZOMBIES_H
 
 #include <iostream>
 #include <utility>
 using namespace std;
 
 class Zombie {
-protected:
+public:
     int vida;
     int velocidad = 5;
     int danio = 100;
     pair<int,int> pos;
     bool paralizado = false;
-    int ticks = 0;
     bool PlantaCerca = false;
+    bool especial = false;
+    int ticks = 0;
+    
 
-
-public:
     Zombie(int v, double vel) : vida(v), velocidad(vel) {}
     virtual ~Zombie() {}
 
@@ -36,17 +36,18 @@ public:
     }
 
     void setPos(pair<int,int> p) { pos = p; }
+    
     pair<int,int> getPos() const { return pos; }
 
     int getVida() const { return vida; }
 
-    void setParalizado(bool valor){
-        paralizado = valor;
-    }
+    void setParalizado(bool valor){ paralizado = valor; }
 
-    bool anadirTick(){
-        if (ticks % velocidad == 0){
-            
+    void setPlantaCerca(bool valor){ especial = valor; }
+
+    bool anadirTick(int demora){
+        if (ticks % demora == 0){
+            return true;
         }
     }
 
@@ -58,7 +59,9 @@ public:
     ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
-        cout << "Zombie normal camina hacia la casa.\n";
+        if (anadirTick(velocidad) && not paralizado) {
+            pos.second--;
+        }
     }
 };
 
@@ -68,8 +71,9 @@ public:
     ZombieFortificadoCono() : Zombie(560, 5) {}
 
     void actuar() override {
-        cout << "Zombie cono avanza\n";
-    }
+        if (anadirTick(velocidad) && not paralizado) {
+            pos.second--;
+        }    }
 };
 
 
@@ -77,21 +81,23 @@ class ZombieAtletico : public Zombie {
 public:
     ZombieAtletico() : Zombie(335, 3) {}
 
-    bool saltar = true;
-
+    bool especial = true;
     void Saltar() {
         cout << "Zombie atletico salto\n";
         velocidad = 5;
-        saltar = false;
-        pos.first++;
+        especial = false;
+        pos.first--;
     }
 
     void actuar() override {
-        cout << "Zombie atletico avanza rapidamente\n";
+        if (PlantaCerca && not paralizado) Saltar();
+        else if (anadirTick(velocidad) && not paralizado) {
+            pos.first--;
+        }
     }
 };
 
+
+
+
 #endif
-
-
-
