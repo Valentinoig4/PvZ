@@ -68,7 +68,7 @@ public:
 
 class ZombieCubo : public Zombie {
 public:
-    ZombieFortificadoCono() : Zombie(1290, 5) {}
+    ZombieCubo() : Zombie(1290, 5) {}
 
     void actuar() override {
         if (anadirTick(velocidad) && not paralizado) {
@@ -79,7 +79,7 @@ public:
 
 class ZombieCono : public Zombie {
 public:
-    ZombieFortificadoCono() : Zombie(560, 5) {}
+    ZombieCono() : Zombie(560, 5) {}
 
     void actuar() override {
         if (anadirTick(velocidad) && not paralizado) {
@@ -112,5 +112,6 @@ public:
 
 
 #endif
+
 
 
