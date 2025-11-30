@@ -1,22 +1,19 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include <iostream>
-#include "Mapa.h"
-#include "Oleadas.h"
-#include "ZombieComun.h"
-#include "ZombieFortificadoCasco.h"
-#include "ZombieFortificadoCono.h"
-#include "ZombieAtletico.h"
+#include <utility>
 
-using namespace std;
+#include "Oleada.h"
+#include "Mapa.h"
+#include "Zombie.h"
+
 
 class CPU {
 public:
-    Oleadas oleadas;
-    Mapa* mapa;
+    Oleada oleada;
+    Mapa* mapa{};
 
-    CPU(Mapa* m) : mapa(m) {}
+    CPU(Oleada _oleada, Mapa* m) : oleada(std::move(_oleada)), mapa(m) {}
 
     Zombie* generarZombieRandom() {
         int tipo = rand() % 4;
@@ -33,7 +30,6 @@ public:
             cout << "CPU hizo zombie de cono\n";
             return new ZombieFortificadoCono();
         }
-
         cout << "CPU hizo Zombie atletico\n";
         return new ZombieAtletico();
     }
@@ -45,4 +41,4 @@ public:
     }
 };
 
-#endif
+#endif //CPU_H
