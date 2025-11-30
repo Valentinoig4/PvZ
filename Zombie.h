@@ -66,7 +66,18 @@ public:
 };
 
 
-class ZombieFortificadoCono : public Zombie {
+class ZombieCubo : public Zombie {
+public:
+    ZombieFortificadoCono() : Zombie(560, 5) {}
+
+    void actuar() override {
+        if (anadirTick(velocidad) && not paralizado) {
+            pos.second--;
+        }    }
+};
+
+
+class ZombieCono : public Zombie {
 public:
     ZombieFortificadoCono() : Zombie(560, 5) {}
 
@@ -101,3 +112,4 @@ public:
 
 
 #endif
+
