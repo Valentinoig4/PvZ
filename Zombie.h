@@ -15,6 +15,7 @@ protected:
     double velocidad = 4.7;
     int danio = 100;
     pair<int,int> pos;
+    bool paralizado = false;
 
 public:
     Zombie(int v, double vel) : vida(v), velocidad(vel) {}
@@ -47,7 +48,7 @@ public:
 
 class ZombieFortificadoCono : public Zombie {
 public:
-    ZombieFortificadoCono() : Zombie(560, 100) {}
+    ZombieFortificadoCono() : Zombie(560, 4.7) {}
 
     void actuar() override {
         cout << "Zombie cono avanza\n";
@@ -73,4 +74,5 @@ public:
 
 
 #endif
+
 
