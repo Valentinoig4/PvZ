@@ -16,7 +16,7 @@ public:
     int danio = 100;
     pair<int,int> pos;
     bool paralizado = false;
-    bool PlantaCerca = false;
+    bool plantaCerca = false;
     bool especial = false;
     int ticks = 0;
     
@@ -43,7 +43,7 @@ public:
 
     void setParalizado(bool valor){ paralizado = valor; }
 
-    void setPlantaCerca(bool valor){ PlantaCerca = valor; }
+    void setPlantaCerca(bool valor){ plantaCerca = valor; }
 
     bool anadirTick(int demora){
         if (demora <= 0) return true;
@@ -103,7 +103,7 @@ public:
     }
 
     void actuar() override {
-        if (PlantaCerca && not paralizado) Saltar();
+        if (plantaCerca && not paralizado) Saltar();
         else if (anadirTick(velocidad) && not paralizado) {
             pos.second--;
         }
@@ -114,6 +114,7 @@ public:
 
 
 #endif
+
 
 
 
