@@ -16,6 +16,9 @@ protected:
     int danio = 100;
     pair<int,int> pos;
     bool paralizado = false;
+    int ticks = 0;
+    bool PlantaCerca = false;
+
 
 public:
     Zombie(int v, double vel) : vida(v), velocidad(vel) {}
@@ -34,6 +37,11 @@ public:
     pair<int,int> getPos() const { return pos; }
 
     int getVida() const { return vida; }
+
+    void setParalizado(bool valor){
+        paralizado = valor;
+
+    
 };
 
 class ZombieComun : public Zombie {
@@ -60,9 +68,13 @@ class ZombieAtletico : public Zombie {
 public:
     ZombieAtletico() : Zombie(335, 2.5) {}
 
+    bool saltar = true;
+
     void Saltar() {
         cout << "Zombie atletico salto\n";
         velocidad = 4.7;
+        saltar = false;
+        pos.first++;
     }
 
     void actuar() override {
@@ -74,5 +86,6 @@ public:
 
 
 #endif
+
 
 
