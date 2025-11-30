@@ -7,7 +7,6 @@ protected:
     float demora{};
 public:
     Planta() = default;
-    virtual ~Planta() = default;
     Planta(int v, float d, int c, int n) : vida(v), costo(c), nivel(n), demora(d) {};
     virtual void accion() = 0;
     void recibir_dano(int dano) {
@@ -21,7 +20,21 @@ protected:
     int ataque{};
 public:
     Atacante() = default;
-    Atacante(int v, int a, float d, int c, int n) : Planta(v, d, c, n), ataque(a) {};
+    Atacante(int v, int a, float d, int c, int n) : Planta(v, d, c, n), ataque(a) {}
+};
+
+class Productor : public Planta {
+protected:
+    int soles;
+public:
+    Productor() = default;
+    Productor(int v, int s, int c, int n, float d) : Planta(v, d, c, n), soles(s) {}
+};
+
+class Soporte : public Planta {
+public:
+    Soporte() = default;
+    Soporte(int v, int c, int n, float d) : Planta(v, d, c, n) {}
 };
 
 class LanzaGuisantes : public Atacante {
