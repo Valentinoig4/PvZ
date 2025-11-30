@@ -49,6 +49,8 @@ public:
         return vida > 0; 
     }
 
+    void setVida(int v) {vida = v;}
+
     void setPos(pair<int,int> p) { pos = p; }
     
     pair<int,int> getPos() const { return pos; }
@@ -133,9 +135,44 @@ public:
 };
 
 
+class ZombieGigante : public Zombie {
+public:
+
+    ZombieGigante() : Zombie(3000, 2) {
+        danio = 5000;
+        especial = true;
+    }
+    
+
+
+    void actuar() override {
+        if (ticksParalizado == 0 && anadirTick(velocidad)) {
+            pos.second--;
+        }
+
+        if (especial && vida <= 1500) {
+            int nuevaFila = pos.first;
+            int nuevaCol = pos.second - 4;
+            if (nuevaCol < 0) nuevaCol = 0;
+
+            zombieLanzado = new ZombieComun();
+            zombieLanzado->setPos({nuevaFila, nuevaCol});
+            zombieLanzado->setVida(190);
+            especial = false;
+        }
+
+        if (ticksParalizado > 0) {
+            ticksParalizado--;
+
+        }
+    }
+};
+
+
 
 
 #endif
+
 
 
 
