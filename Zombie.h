@@ -20,6 +20,7 @@ public:
     bool especial = false;
     int ticks = 0;
     bool congelado = false;
+    int ticksParalizado = 0
     
 
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
@@ -55,7 +56,11 @@ public:
 
     int getVida() const { return vida; }
 
-    void setParalizado(bool valor){ paralizado = valor; }
+    void setParalizado(bool valor){ 
+        paralizado = valor;
+        if (valor) ticksParalizado = 4;
+    
+    }
 
     void setPlantaCerca(bool valor){ plantaCerca = valor; }
 
@@ -120,6 +125,7 @@ public:
         if (plantaCerca && !paralizado) Saltar();
         else if (anadirTick(velocidad) && !paralizado) {
             pos.second--;
+        
         }
     }
 };
@@ -128,6 +134,7 @@ public:
 
 
 #endif
+
 
 
 
