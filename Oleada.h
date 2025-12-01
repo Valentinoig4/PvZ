@@ -14,11 +14,12 @@ enum class tipoZombie {
 class Oleada {
 public:
     vector<tipoZombie> zombies{};
+    vector<string> plantasDisponibles{};
     int velocidadDeSpawneo{};
     int cantZombies{};
     Oleada() = default;
-    Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo, int _cantZombies) : zombies(_zombies), velocidadDeSpawneo(_velocidadDeSpawneo), cantZombies(_cantZombies) {};
-
+    Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo, int _cantZombies, vector<string> pd) : zombies(_zombies),
+    velocidadDeSpawneo(_velocidadDeSpawneo), cantZombies(_cantZombies), plantasDisponibles(pd) {};
 
 };
 

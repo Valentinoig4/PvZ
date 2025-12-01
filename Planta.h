@@ -4,16 +4,19 @@
 #include <random>
 #include "Zombie.h"
 
+//Para distinguir los tipos de planta
 enum class tipoPlanta {
     atacante,productor, soporte
 };
 
+//Para distinguir que plantas son
 enum class nombrePlanta {
     lanzaGuisantes, lanzaGuisantesDoble, lanzaGuisantesHielo,
     lanzaGuisantesFuego, lanzaMaiz, girasol, girasolDoble,
     nuez, nuezDoble, n
 };
 
+//Clase madre de las plantas
 class Planta {
 protected:
     int vida{}, costo{}, nivel{}, ticks{}, demora{};
@@ -21,7 +24,7 @@ public:
     tipoPlanta tipo;
     nombrePlanta nombre{};
     Planta() = default;
-    Planta(tipoPlanta t, nombrePlanta p, int v, float d, int c, int n) : vida(v), costo(c), nivel(n), demora(d), tipo(t) {}
+    Planta(tipoPlanta t, nombrePlanta p, int v, float d, int c, int n) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p) {}
     bool anadirTick() {
         ticks++;
         if (tipo != tipoPlanta::soporte && demora > 0)
@@ -34,6 +37,7 @@ public:
     }
 };
 
+//Hijo que representa las plantas que atacan/danan zombies
 class Atacante : public Planta {
 protected:
     int ataque{};
@@ -45,6 +49,7 @@ public:
     }
 };
 
+//Hijo que representa las plantas que producen soles
 class Productor : public Planta {
 protected:
     int soles{};
@@ -54,6 +59,7 @@ public:
     int habilidadPasiva() {return soles;}
 };
 
+//Hijo que representan a las plantas que no atacan ni producen, solo sirven de soporte
 class Soporte : public Planta {
 public:
     Soporte() { tipo = tipoPlanta::soporte; };
