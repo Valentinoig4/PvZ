@@ -9,6 +9,8 @@ using namespace std;
 class Jugador {
 protected:
     vector<Planta*> plantas;
+public:
+    int cantidadSoles{};
 };
 
 

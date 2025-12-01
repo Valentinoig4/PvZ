@@ -1,6 +1,7 @@
 #ifndef PLANTA_H
 #define PLANTA_H
 
+#include <random>
 #include "Zombie.h"
 
 enum class tipoPlanta {
@@ -20,7 +21,7 @@ public:
             return ticks % demora == 0;
         return false;
     }
-    void recibir_dano(int dano) {
+    void operator -=(int dano) {
         vida -= dano;
         vida < 0 ? vida = 0 : vida;
     }
@@ -32,7 +33,9 @@ protected:
 public:
     Atacante() { tipo = tipoPlanta::atacante; }
     Atacante(int v, int a, int d, int c, int n) : Planta(tipoPlanta::atacante, v, d, c, n), ataque(a) {}
-    virtual void accion(Zombie& z) = 0;
+    virtual void accion(Zombie& z) {
+        z -= ataque;
+    }
 };
 
 class Productor : public Planta {
@@ -40,8 +43,8 @@ protected:
     int soles{};
 public:
     Productor() { tipo = tipoPlanta::productor; }
-    Productor(int v, int s, int c, int n, int d) : Planta(tipoPlanta::productor, v, d, c, n), soles(s) {}
-    virtual void accion() = 0;
+    Productor(int v, int s, int d, int c, int n) : Planta(tipoPlanta::productor, v, d, c, n), soles(s) {}
+    int habilidadPasiva() {return soles;}
 };
 
 class Soporte : public Planta {
@@ -53,14 +56,60 @@ public:
 class LanzaGuisantes : public Atacante {
 public:
     LanzaGuisantes() : Atacante(300, 20, 3, 100, 1) {}
-    void accion (Zombie& z) override {
-        z.recibirDanio(ataque);
-    }
 };
 
 class LanzaGuisantesDoble : public Atacante {
 public:
-    LanzaGuisantesDoble() : Atacante(200, 20, 3, 100, 1) {}
+    LanzaGuisantesDoble() : Atacante(300, 40, 3, 150, 1) {}
+};
+
+class LanzaGuisantesHielo : public Atacante {
+public:
+    LanzaGuisantesHielo() : Atacante(300, 20, 3, 175, 1) {}
+    void accion(Zombie& z) override {
+        z -= ataque;
+        !z.congelado ? z.velocidad += 2 : z.velocidad;
+        z.congelado = true;
+    }
+};
+
+class LanzaGuisantesFuego : public Atacante {
+public:
+    LanzaGuisantesFuego() : Atacante(300, 30, 3, 150, 1) {}
+};
+
+class LanzaMaiz : public Atacante {
+public:
+    LanzaMaiz() : Atacante(300, 20, 3, 100, 1) {}
+    void accion(Zombie& z) override {
+        random_device rd;
+        if (rd() % 100 < 30) {
+            z -= ataque*2;
+            z.ticksParalizado = 4;
+        } else {
+            z -= ataque;
+        }
+    }
+};
+
+class Girasol : public Productor {
+public:
+    Girasol() : Productor(300, 50, 49, 50, 1) {}
+};
+
+class GirasolDoble : public Productor {
+public:
+    GirasolDoble() : Productor(300, 100, 49, 50, 1) {}
+};
+
+class Nuez : public Soporte {
+public:
+    Nuez() : Soporte(4000, 50, 1, 0) {}
+};
+
+class NuezDoble : public Soporte {
+public:
+    NuezDoble() : Soporte(8000, 125, 1, 0) {}
 };
 
 #endif //PLANTA_H
