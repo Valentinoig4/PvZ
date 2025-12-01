@@ -49,6 +49,8 @@ public:
         return vida > 0; 
     }
 
+    void setVida(int v) {vida = v;}
+
     void setPos(pair<int,int> p) { pos = p; }
     
     pair<int,int> getPos() const { return pos; }
@@ -76,7 +78,7 @@ public:
     ZombieComun() : Zombie(190, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }
         if (ticksParalizado > 0) ticksParalizado--;
@@ -89,7 +91,7 @@ public:
     ZombieCubo() : Zombie(1290, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }    
         if (ticksParalizado > 0) ticksParalizado--;
@@ -102,7 +104,7 @@ public:
     ZombieCono() : Zombie(560, 5) {}
 
     void actuar() override {
-        if (anadirTick(velocidad) && ticksParalizado > 0) {
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
             pos.second--;
         }
 
@@ -126,12 +128,42 @@ public:
     }
 
     void actuar() override {
-        if (plantaCerca && !paralizado) Saltar();
-        else if (anadirTick(velocidad) && ticksParalizado > 0) {
-            pos.second--;
-
+        if (plantaCerca && ticksParalizado == 0) Saltar();
+        else if (anadirTick(velocidad) && ticksParalizado == 0) pos.second--;
         if (ticksParalizado > 0) ticksParalizado--;
-        
+    }
+};
+
+
+class ZombieGigante : public Zombie {
+public:
+
+    ZombieGigante() : Zombie(3000, 2) {
+        danio = 5000;
+        especial = true;
+    }
+    
+
+
+    void actuar() override {
+        if (ticksParalizado == 0 && anadirTick(velocidad)) {
+            pos.second--;
+        }
+
+        if (especial && vida <= 1500) {
+            int nuevaFila = pos.first;
+            int nuevaCol = pos.second - 4;
+            if (nuevaCol < 0) nuevaCol = 0;
+
+            zombieLanzado = new ZombieComun();
+            zombieLanzado->setPos({nuevaFila, nuevaCol});
+            zombieLanzado->setVida(190);
+            especial = false;
+        }
+
+        if (ticksParalizado > 0) {
+            ticksParalizado--;
+
         }
     }
 };
@@ -140,6 +172,9 @@ public:
 
 
 #endif
+
+
+
 
 
 
