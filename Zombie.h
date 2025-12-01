@@ -173,10 +173,32 @@ public:
     }
 };
 
+class ZombiePeriodico : public Zombie {
+public:
+    ZombiePeriodico() : Zombie(340, 5) {
+        especial = true
+    }
 
+    void Enojar(){
+        velocidad = 2;
+        especial = false
+    }
+
+    void actuar() override {
+        if (vida <= 190) Enojar();
+        if (anadirTick(velocidad) && ticksParalizado == 0) {
+            pos.second--;
+        }
+
+        if (ticksParalizado > 0) ticksParalizado--;
+
+    }
+
+};
 
 
 #endif
+
 
 
 
