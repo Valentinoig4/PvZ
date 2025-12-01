@@ -25,6 +25,8 @@ public:
     bool congelado = false;
     int ticksParalizado = 0;
     bool gigante = false;
+
+    char ID = 'z';
     
 
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
@@ -73,7 +75,9 @@ public:
 
 class ZombieComun : public Zombie {
 public:
-    ZombieComun() : Zombie(190, 5) {}
+    ZombieComun() : Zombie(190, 5) {
+        ID = 'Z';
+    }
 
     void actuar() override {
         if (anadirTick(velocidad) && ticksParalizado == 0) {
@@ -86,7 +90,9 @@ public:
 
 class ZombieCubo : public Zombie {
 public:
-    ZombieCubo() : Zombie(1290, 5) {}
+    ZombieCubo() : Zombie(1290, 5) {
+        ID = 'M';
+    }
 
     void actuar() override {
         if (anadirTick(velocidad) && ticksParalizado == 0) {
@@ -99,7 +105,9 @@ public:
 
 class ZombieCono : public Zombie {
 public:
-    ZombieCono() : Zombie(560, 5) {}
+    ZombieCono() : Zombie(560, 5) {
+        ID = 'O';
+    }
 
     void actuar() override {
         if (anadirTick(velocidad) && ticksParalizado == 0) {
@@ -116,6 +124,7 @@ class ZombieAtletico : public Zombie {
 public:
     ZombieAtletico() : Zombie(335, 3) {
         especial = true;
+        ID = 'A';
     }
 
     void Saltar() {
@@ -140,6 +149,7 @@ public:
         danio = 5000;
         especial = true;
         gigante = true;
+        ID = 'G';
     }
 
     pair<int,int> zombieLanzado; // Ubicacion del nuevo zombie
@@ -158,13 +168,10 @@ public:
             especial = false;
         }
 
-
-            
-        }
+        
 
         if (ticksParalizado > 0) {
             ticksParalizado--;
-
         }
     }
 };
@@ -172,44 +179,20 @@ public:
 class ZombiePeriodico : public Zombie {
 public:
     ZombiePeriodico() : Zombie(340, 5) {
-        especial = true
+        especial = true;
     }
 
     void Enojar(){
         velocidad = 2; // se vuelve mas rapido
-        especial = false
+        especial = false;
     }
 
     void actuar() override {
         if (vida <= 190) Enojar();
-        if (anadirTick(velocidad) && ticksParalizado == 0) {
-            pos.second--;
-        }
-
+        if (anadirTick(velocidad) && ticksParalizado == 0) pos.second--;
         if (ticksParalizado > 0) ticksParalizado--;
 
     }
-
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
