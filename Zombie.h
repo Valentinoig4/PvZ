@@ -20,6 +20,7 @@ public:
     int ticks = 0;
     bool congelado = false;
     int ticksParalizado = 0;
+    bool gigante = false;
     
 
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
@@ -141,6 +142,7 @@ public:
     ZombieGigante() : Zombie(3000, 2) {
         danio = 5000;
         especial = true;
+        gigante = true;
     }
 
     pair<int,int> zombieLanzado;
@@ -175,6 +177,7 @@ public:
 
 
 #endif
+
 
 
 
