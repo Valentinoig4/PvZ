@@ -9,8 +9,12 @@
 #include <utility>
 using namespace std;
 
+// CREAMOS LA CLASE BASE ZOMBIE
+
 class Zombie {
 public:
+
+// Atributos importantes
     int vida;
     int velocidad = 5;
     int danio = 100;
@@ -27,13 +31,19 @@ public:
     virtual ~Zombie() {}
 
     virtual void actuar() = 0;
-
+//Setters
     void setVelocidad(int vel){ velocidad = vel;}
-
     void setCongelado(bool valor){ congelado = valor;}
-
+    void setVida(int v) {vida = v;}
+    void setPos(pair<int,int> p) { pos = p; }
+    void setParalizado(int valor){ ticksParalizado = valor; }
+    void setPlantaCerca(bool valor){ plantaCerca = valor; }
+//Getters
     bool getCongelado() const { return congelado; }
     bool getPlantaCerca() const { return plantaCerca; }
+    pair<int,int> getPos() const { return pos; }
+    int getVida() const { return vida; }
+
 
 
     void recibirDanio(int d) {
@@ -50,19 +60,6 @@ public:
         return vida > 0; 
     }
 
-    void setVida(int v) {vida = v;}
-
-    void setPos(pair<int,int> p) { pos = p; }
-    
-    pair<int,int> getPos() const { return pos; }
-
-    int getVida() const { return vida; }
-
-    void setParalizado(int valor){ 
-        ticksParalizado = valor;
-    }
-
-    void setPlantaCerca(bool valor){ plantaCerca = valor; }
 
     bool anadirTick(int demora){
         if (demora <= 0) return false;
@@ -123,9 +120,9 @@ public:
 
     void Saltar() {
         cout << "Zombie atletico salto\n";
-        velocidad = 5;
-        especial = false;
-        pos.second--;
+        velocidad = 5;  // aumentan los segundos por casilla
+        especial = false; // no tiene habilidad
+        pos.second--; // avanza una casilla instantaneamente
     }
 
     void actuar() override {
@@ -145,8 +142,7 @@ public:
         gigante = true;
     }
 
-    pair<int,int> zombieLanzado;
-    
+    pair<int,int> zombieLanzado; // Ubicacion del nuevo zombie
 
 
     void actuar() override {
@@ -180,7 +176,7 @@ public:
     }
 
     void Enojar(){
-        velocidad = 2;
+        velocidad = 2; // se vuelve mas rapido
         especial = false
     }
 
@@ -198,6 +194,7 @@ public:
 
 
 #endif
+
 
 
 
