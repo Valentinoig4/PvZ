@@ -1,7 +1,3 @@
-//
-// Created by Rafael Chamayo on 29/11/25.
-//
-
 #ifndef MAPA_H
 #define MAPA_H
 
@@ -16,6 +12,7 @@
 #include <memory>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 using namespace std;
 
 class Celda {
@@ -39,6 +36,7 @@ public:
     int ticks{};
 
     // --------------- CONSTRUCTOR ------------------
+
     Mapa() {
         mapa.resize(6);
         for (auto &fila: mapa) {
@@ -50,6 +48,7 @@ public:
     // --------------- METODOS RELEVANTES---------------------
 
     // AÑADIR OLEADA
+
     void aniadirOleada(const Oleada &_oleada) {
         oleada = _oleada;
     };
@@ -67,8 +66,10 @@ public:
             mapa[filaRand][8].zombies.push_back(std::make_unique<ZombieCono>(pair<int, int>(filaRand, 8)));
         } else if (zombie == tipoZombie::Cubo) {
             mapa[filaRand][8].zombies.push_back(std::make_unique<ZombieCubo>(pair<int, int>(filaRand, 8)));
-        } else {
+        } else if (zombie == tipoZombie::Atletico) {
             mapa[filaRand][8].zombies.push_back(std::make_unique<ZombieAtletico>(pair<int, int>(filaRand, 8)));
+        } else {
+            mapa[filaRand][8].zombies.push_back(std::make_unique<ZombieGigante>(pair<int, int>(filaRand, 8)));
         }
         zombiesUtilizados++;
     }
@@ -78,11 +79,16 @@ public:
     void tickZombie() {
         ticks++;
         if (ticks%oleada.velocidadDeSpawneo == 0) {
-            randZombie();
+            random_device rd;
+            unsigned int numZombie = rd() % 3 +1;
+            for (unsigned int i = 0; i < numZombie; i++) {
+                randZombie();
+            }
         }
     }
 
     // ENCONTRAR AL ZOMBIE MAS CERCANO
+
     Zombie* zombieCercano(int fila) {
         for (auto & j : mapa[fila]) {
             if (!j.zombies.empty()) {
@@ -93,6 +99,8 @@ public:
     }
 
     // AÑADIR PLANTA
+
+
 
     // VERIFICAR SI YA SE USARON TODOS LOS ZOMBIES Y YA NO HAY EN EL MAPA
 
@@ -106,6 +114,12 @@ public:
             return false;
         }
         return true;
+    }
+
+    //IMPRIMIR UNA CELDA
+
+    void imprimirCelda() {
+        
     }
 
     // ------------------ ENGINE ------------------
@@ -206,6 +220,10 @@ public:
             }
         }
         return perdioJuego;
+    }
+
+    void imprimir() {
+
     }
 
     // ------------------ MAIN ENGINE ------------------
