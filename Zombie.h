@@ -142,6 +142,8 @@ public:
         danio = 5000;
         especial = true;
     }
+
+    pair<int,int> zombieLanzado;
     
 
 
@@ -151,14 +153,15 @@ public:
         }
 
         if (especial && vida <= 1500) {
-            int nuevaFila = pos.first;
-            int nuevaCol = pos.second - 4;
-            if (nuevaCol < 0) nuevaCol = 0;
-
-            zombieLanzado = new ZombieComun();
-            zombieLanzado->setPos({nuevaFila, nuevaCol});
-            zombieLanzado->setVida(190);
+            zombieLanzado.first = pos.first;
+            zombieLanzado.second = pos.second - 4;
+            if (zombieLanzado.second < 0) zombieLanzado.second = 0;
+            
             especial = false;
+        }
+
+
+            
         }
 
         if (ticksParalizado > 0) {
@@ -172,6 +175,7 @@ public:
 
 
 #endif
+
 
 
 
