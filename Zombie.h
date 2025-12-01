@@ -1,7 +1,3 @@
-//
-// Created by fvale on 11/30/2025.
-//
-
 #ifndef ZOMBIES_H
 #define ZOMBIES_H
 
@@ -26,13 +22,14 @@ public:
     int ticksParalizado = 0;
     bool gigante = false;
 
+// Creamos un ID para cada zombie
     char ID = 'z';
     
-
+// Constructor y destructor de la clase
     Zombie(int v, int vel) : vida(v), velocidad(vel) {}
     virtual ~Zombie() {}
-
     virtual void actuar() = 0;
+
 //Setters
     void setVelocidad(int vel){ velocidad = vel;}
     void setCongelado(bool valor){ congelado = valor;}
@@ -40,6 +37,7 @@ public:
     void setPos(pair<int,int> p) { pos = p; }
     void setParalizado(int valor){ ticksParalizado = valor; }
     void setPlantaCerca(bool valor){ plantaCerca = valor; }
+
 //Getters
     bool getCongelado() const { return congelado; }
     bool getPlantaCerca() const { return plantaCerca; }
@@ -53,6 +51,7 @@ public:
         if (vida < 0) vida = 0;
     }
 
+// Funcion para recibir danio con el operador -=
     void operator-=(int d) {
         vida -= d;
         if (vida < 0) vida = 0;
@@ -62,7 +61,7 @@ public:
         return vida > 0; 
     }
 
-
+// Usaremos esta funcion para medir el tiempo
     bool anadirTick(int demora){
         if (demora <= 0) return false;
         ticks++;
@@ -72,6 +71,8 @@ public:
 
     
 };
+
+// Los siguientes 3 zombies son los basicos, solo cambian su vida
 
 class ZombieComun : public Zombie {
 public:
@@ -119,6 +120,7 @@ public:
     }
 };
 
+// Este zombie va mas rapido que los demas y cuando encuentra una planta la puede saltar una vez
 
 class ZombieAtletico : public Zombie {
 public:
@@ -129,8 +131,8 @@ public:
 
     void Saltar() {
         cout << "Zombie atletico salto\n";
-        velocidad = 5;  // aumentan los segundos por casilla
-        especial = false; // no tiene habilidad
+        velocidad = 5;  // aumentan los segundos por casilla, osea es mas lento
+        especial = false; // no tiene habilidad, porque ya la uso
         pos.second--; // avanza una casilla instantaneamente
     }
 
@@ -141,6 +143,7 @@ public:
     }
 };
 
+// El zombie gigante hace danio infinito, y cuando este a 50% de vida lanza un zombie normal a 4 casillas
 
 class ZombieGigante : public Zombie {
 public:
@@ -163,7 +166,7 @@ public:
         if (especial && vida <= 1500) {
             zombieLanzado.first = pos.first;
             zombieLanzado.second = pos.second - 4;
-            if (zombieLanzado.second < 0) zombieLanzado.second = 0;
+            if (zombieLanzado.second < 1) zombieLanzado.second = 1;
             
             especial = false;
         }
@@ -175,6 +178,8 @@ public:
         }
     }
 };
+
+// Este zombie se enoja cuando llegue a cierta cantidad de vida
 
 class ZombiePeriodico : public Zombie {
 public:
@@ -196,3 +201,4 @@ public:
 };
 
 #endif
+
