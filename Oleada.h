@@ -1,4 +1,3 @@
-
 #ifndef OLEADA_H
 #define OLEADA_H
 #include <utility>
@@ -6,16 +5,19 @@
 
 enum class tipoZombie {
     Comun,
-    Fortificado,
-    Especial
+    Cono,
+    Cubo,
+    Atletico,
+    Gigante
 };
 
 class Oleada {
 public:
     vector<tipoZombie> zombies{};
     int velocidadDeSpawneo{};
-
-    Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo) : zombies(_zombies), velocidadDeSpawneo(_velocidadDeSpawneo) {};
+    int cantZombies{};
+    Oleada() = default;
+    Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo, int _cantZombies) : zombies(_zombies), velocidadDeSpawneo(_velocidadDeSpawneo), cantZombies(_cantZombies) {};
 
 
 };
