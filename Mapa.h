@@ -27,7 +27,7 @@ public:
 class Mapa {
 public:
     vector<vector<Celda>> grilla;
-    Oleada oleada{};
+    Oleada* oleada{};
     int solesGenerados{};
     int zombiesUtilizados{};
     int ticks{};
@@ -48,16 +48,16 @@ public:
 
     // AÑADIR OLEADA
 
-    void aniadirOleada(Oleada &_oleada) {
+    void aniadirOleada(Oleada* _oleada) {
         oleada = _oleada;
     };
 
     // AÑADIR UN ZOMBIE ALEATORIAMENTE
     void randZombie() {
-        if (zombiesUtilizados <= oleada.cantZombies) {
+        if (zombiesUtilizados <= oleada->cantZombies) {
             random_device rd;
-            unsigned int numZombie = rd() % oleada.zombies.size();
-            tipoZombie zombie = oleada.zombies[numZombie];
+            unsigned int numZombie = rd() % oleada->zombies.size();
+            tipoZombie zombie = oleada->zombies[numZombie];
             unsigned int filaRand = rd() % grilla.size();
 
             if (zombie == tipoZombie::Comun) {
@@ -79,7 +79,7 @@ public:
 
     void tickZombie() {
         ticks++;
-        if (ticks%oleada.velocidadDeSpawneo == 0) {
+        if (ticks%oleada->velocidadDeSpawneo == 0) {
             random_device rd;
             unsigned int numZombie = rd() % 3 +1;
             for (unsigned int i = 0; i < numZombie; i++) {
@@ -133,7 +133,7 @@ public:
     // VERIFICAR SI YA SE USARON TODOS LOS ZOMBIES Y YA NO HAY EN EL MAPA
 
     bool oleadaIncompleta() {
-        if (zombiesUtilizados == oleada.cantZombies) {
+        if (zombiesUtilizados == oleada->cantZombies) {
             for (auto & i : grilla) {
                 for (auto & j : i) {
                     if (!j.zombies.empty()) { return true; }
