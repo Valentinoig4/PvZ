@@ -29,9 +29,10 @@ public:
         cout<<endl;
         while (true) {
             cout<<"Soles disponibles: "<<soles<<endl;
-            cout<<"Ingrese el numero de la planta: ";
+            cout<<"Ingrese el numero de la planta (para finalizar ingrese -1): ";
             while (numero < 1 || numero > pDisponibles.size()) {
                 cin>>numero;
+                if (numero == -1) return;
                 if (pDisponibles[numero-1] == "Lanzaguisantes") costo = 100;
                 else if (pDisponibles[numero-1] == "Lanzaguisantes Doble") costo = 150;
                 else if (pDisponibles[numero-1] == "Lanzaguisantes de Hielo") costo = 175;
