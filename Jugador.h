@@ -11,12 +11,11 @@ using namespace std;
 
 class Jugador {
 protected:
-    vector<Planta*> plantas;
     Mapa* m;
 public:
     int soles{};
     Jugador() = default;
-    Jugador(vector<Planta*> p, Mapa* mp, int s) : plantas(p), m(mp), soles(s) {}
+    Jugador(Mapa* mp, int s) : m(mp), soles(s) {}
     //Aca se le va a pedir al usuario que de una planta y en que lugar la quiere poner
     void pedirPlantas(Oleada* o) {
         int numero=0, fila=0, columna=0, costo=0;
