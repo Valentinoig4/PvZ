@@ -14,21 +14,23 @@ protected:
     Mapa* m;
 public:
     int soles{};
+    string nombre{};
     Jugador() = default;
     Jugador(Mapa* mp, int s) : m(mp), soles(s) {}
-    //Aca se le va a pedir al usuario que de una planta y en que lugar la quiere poner
-    void pedirPlantas(Oleada& o) {
+
+    //Aca se le va a pedir al usuario que de una planta o elimine una y en que lugar la quiere poner
+
+    void fasePlantas(Oleada& o) {
         int numero=0, fila=0, columna=0, costo=0;
         vector<string> pDisponibles = o.getPlantasDisponibles();
-        cout<<"ELIJA SUS PLANTAS:"<<endl;
-        cout<<"Plantas disponibles:"<<endl;
+        cout<<"Plantas disponibles: " << endl;
         for (int i = 0; i < pDisponibles.size(); i++) {
-            cout<<i+1<<": "<<pDisponibles[i]<<" ";
+            cout<<i+1<<" ("<<pDisponibles[i]<<") ";
         }
-        cout<<endl;
+        cout<<endl << endl;
         while (true) {
             cout<<"Soles disponibles: "<<soles<<endl;
-            cout<<"Ingrese el numero de la planta (para finalizar ingrese -1): ";
+            cout<<"Numero de la planta (-1 para finalizar): ";
             numero = 0, fila = 0, columna = 0, costo = 0;
             while (numero < 1 || numero > pDisponibles.size()) {
                 cin>>numero;
@@ -48,11 +50,13 @@ public:
                 continue;
             }
             soles -= costo;
-            cout<<"Ingrese la fila y columna donde poner la planta (fila columna)";
+            cout << endl;m->imprimir(); cout << endl;
+            cout<<"Fila y columna para la Planta (fila columna): " ;
             while (fila < 1 || fila > 5 || columna < 1 || columna > 9) {
                 cin>>fila;
                 cin>>columna;
             }
+            cout << endl;
             if (!m->aniadirPlanta(pDisponibles[numero-1], fila-1, columna)) {
                 cout<<"Casilla ocupada"<<endl;
                 soles += costo;
