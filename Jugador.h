@@ -28,6 +28,7 @@ public:
         }
         cout<<endl;
         while (true) {
+            cout<<"Soles disponibles: "<<soles<<endl;
             cout<<"Ingrese el numero de la planta: ";
             while (numero < 1 || numero > pDisponibles.size()) {
                 cin>>numero;
