@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <ctime>
 #include <random>
 #include "Planta.h"
 #include "Zombie.h"
@@ -13,7 +12,6 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
-#include <cstdlib>
 
 using namespace std;
 
@@ -41,7 +39,6 @@ public:
         for (auto &fila: grilla) {
             fila.resize(10);
         }
-
     }
 
     // --------------- METODOS RELEVANTES---------------------
@@ -68,6 +65,8 @@ public:
                 grilla[filaRand][9].zombies.push_back(std::make_unique<ZombieCubo>(pair<int, int>(filaRand, 9)));
             } else if (zombie == tipoZombie::Atletico) {
                 grilla[filaRand][9].zombies.push_back(std::make_unique<ZombieAtletico>(pair<int, int>(filaRand, 9)));
+            } else if (zombie == tipoZombie::Periodico){
+                grilla[filaRand][9].zombies.push_back(std::make_unique<ZombiePeriodico>(pair<int, int>(filaRand, 9)));
             } else {
                 grilla[filaRand][9].zombies.push_back(std::make_unique<ZombieGigante>(pair<int, int>(filaRand, 9)));
             }
@@ -149,19 +148,33 @@ public:
     void imprimirCelda(const Celda& celda) {
         string contenido{};
         if (celda.planta != nullptr) {
-            contenido+= 'P';
+            contenido+= celda.planta->ID;
         }
-        int contzombies{};
         if (!celda.zombies.empty()) {
             for (int i = 0; i < celda.zombies.size(); i++) {
-                contzombies++;
+                contenido += celda.zombies[i]->ID;
             }
-            contenido += " " + to_string(contzombies) + "Z";
         }
         if (contenido.empty()) {
             contenido += '-';
         }
         cout << setw(10) << left << contenido;
+    }
+
+    // RESET
+
+    void reset() {
+        zombiesUtilizados = 0;
+        zombiesEliminados = 0;
+        ticks = 0;
+        dañoRecibido = 0;
+        oleada = nullptr;
+        for (auto &c: grilla) {
+            for (auto & celda : c) {
+                celda.planta = nullptr;
+                celda.zombies.clear();
+            }
+        }
     }
 
     // ------------------ ENGINE ------------------
@@ -207,6 +220,7 @@ public:
                 if (!grilla[i][j].zombies.empty()) {
                     for (int z = 0; z < grilla[i][j].zombies.size();) {
                         if (grilla[i][j].zombies[z]->anadirTick()) {
+                            if (grilla[i][j].planta == nullptr) {grilla[i][j].zombies[z]->plantaEncima = false;}
                             if (grilla[i][j-1].planta != nullptr) {grilla[i][j].zombies[z]->plantaCerca = true;}
                             grilla[i][j].zombies[z]->actuar();
                             int newcol = grilla[i][j].zombies[z]->getPos().second;
@@ -269,7 +283,11 @@ public:
     void imprimir() {
         for (int i = 0; i < grilla.size(); i++) {
             for (int j = 0; j < grilla[i].size(); j++) {
-                imprimirCelda(grilla[i][j]);
+                if (i == 2 && j == 0) {
+                    cout << setw(10) << left << "C";
+                } else {
+                    imprimirCelda(grilla[i][j]);
+                }
             }
             cout << endl;
         }
