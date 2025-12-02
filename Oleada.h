@@ -15,12 +15,18 @@ class Oleada {
 public:
     vector<tipoZombie> zombies{};
     vector<string> plantasDisponibles{};
+    vector<Planta*> plantas{};
     int velocidadDeSpawneo{};
     int cantZombies{};
     Oleada() = default;
     Oleada(const vector<tipoZombie>& _zombies, int _velocidadDeSpawneo, int _cantZombies, vector<string> pd) : zombies(_zombies),
     velocidadDeSpawneo(_velocidadDeSpawneo), cantZombies(_cantZombies), plantasDisponibles(pd) {};
     vector<string> getPlantasDisponibles() { return plantasDisponibles; }
+    ~Oleada() {
+        for (auto c : plantas) {
+            delete c;
+        }
+    };
 };
 
 #endif //OLEADA_H
