@@ -21,7 +21,7 @@ private:
     string historial{};
     Jugador jugador = Jugador(&mapa, 300);
     int oleadasCompletadas{};
-    int zombiesElimintados{};
+    int zombiesEliminados{};
     int dañoRecibido{};
     int puntosFinales{};
     int solesGenerados{};
@@ -58,10 +58,10 @@ public:
             if (!rondaCompleta) {cout << jugador.nombre << " perdiste";break;}
             archivo<<"Nombre: "<<jugador.nombre<<endl;
             archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
-            archivo<<"Zombies eliminados: "<<mapa.zombiesEliminados<<endl;
-            archivo<<"Soles generados: "<<mapa.solesGenerados<<endl;
-            archivo<<"Dano recibido: "<<mapa.dañoRecibido<<endl;
-            archivo<<"Puntos finales: "<<mapa.zombiesEliminados*30<<endl;
+            archivo<<"Zombies eliminados: "<<zombiesEliminados<<endl;
+            archivo<<"Soles generados: "<<solesGenerados<<endl;
+            archivo<<"Dano recibido: "<<dañoRecibido<<endl;
+            archivo<<"Puntos finales: "<<zombiesEliminados*30<<endl;
             archivo.close();
         }
     }
