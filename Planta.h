@@ -20,46 +20,53 @@ enum class nombrePlanta {
 class Planta {
 protected:
     int vida{}, costo{}, nivel{}, ticks{}, demora{};
+    int ataque{};
 public:
-    tipoPlanta tipo;
+    virtual ~Planta() = default;
+    tipoPlanta tipo{};
     nombrePlanta nombre{};
     Planta() = default;
-    Planta(tipoPlanta t, nombrePlanta p, int v, float d, int c, int n) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p) {}
+    Planta(tipoPlanta t, nombrePlanta p, int v, int d, int c, int n) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p) {}
+    Planta(tipoPlanta t, nombrePlanta p,  v, int d, int c, int n, int a) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p), ataque(a) {}
     bool anadirTick() {
         ticks++;
         if (tipo != tipoPlanta::soporte && demora > 0)
             return ticks % demora == 0;
         return false;
     }
+    //para recibir daño
     void operator -=(int dano) {
         vida -= dano;
         vida < 0 ? vida = 0 : vida;
     }
-};
-
-//Hijo que representa las plantas que atacan/danan zombies
-class Atacante : public Planta {
-protected:
-    int ataque{};
-public:
-    Atacante() { tipo = tipoPlanta::atacante; }
-    Atacante(nombrePlanta p, int v, int a, int d, int c, int n) : Planta(tipoPlanta::atacante, p, v, d, c, n), ataque(a) {}
     virtual void accion(Zombie& z) {
         z -= ataque;
     }
+    [[nodiscard]] virtual int habilidadPasiva() const {return 0;}
+
+    [[nodiscard]] int getVida() const {return vida;}
 };
 
-//Hijo que representa las plantas que producen soles
+//plantas que hacen daño a los zombies
+class Atacante : public Planta {
+public:
+    Atacante() { tipo = tipoPlanta::atacante; }
+    Atacante(nombrePlanta p, int v, int a, int d, int c, int n) : Planta(tipoPlanta::atacante, p, v, d, c, n, a) {}
+};
+
+//plantas que producen soles
 class Productor : public Planta {
 protected:
     int soles{};
 public:
     Productor() { tipo = tipoPlanta::productor; }
     Productor(nombrePlanta p, int v, int s, int d, int c, int n) : Planta(tipoPlanta::productor, p, v, d, c, n), soles(s) {}
-    int habilidadPasiva() {return soles;}
+    [[nodiscard]] int habilidadPasiva() const override {
+        return soles;
+    };
 };
 
-//Hijo que representan a las plantas que no atacan ni producen, solo sirven de soporte
+//plantas que ni producen, ni atacan, como las nueces
 class Soporte : public Planta {
 public:
     Soporte() { tipo = tipoPlanta::soporte; };
@@ -68,7 +75,7 @@ public:
 
 class LanzaGuisantes : public Atacante {
 public:
-    LanzaGuisantes() : Atacante(nombrePlanta::lanzaGuisantes, 300, 20, 3, 100, 1) {}
+    LanzaGuisantes() : Atacante(nombrePlanta::lanzaGuisantes,300, 20, 3, 100, 1) {}
 };
 
 class LanzaGuisantesDoble : public Atacante {
@@ -88,12 +95,12 @@ public:
 
 class LanzaGuisantesFuego : public Atacante {
 public:
-    LanzaGuisantesFuego() : Atacante(nombrePlanta::lanzaGuisantesFuego, 300, 30, 3, 150, 1) {}
+    LanzaGuisantesFuego() : Atacante(nombrePlanta::lanzaGuisantesFuego,300, 30, 3, 150, 1) {}
 };
 
 class LanzaMaiz : public Atacante {
 public:
-    LanzaMaiz() : Atacante(nombrePlanta::lanzaMaiz, 300, 20, 3, 100, 1) {}
+    LanzaMaiz() : Atacante(nombrePlanta::lanzaMaiz,300, 20, 3, 100, 1) {}
     void accion(Zombie& z) override {
         random_device rd;
         if (rd() % 100 < 30) {
@@ -107,7 +114,7 @@ public:
 
 class Girasol : public Productor {
 public:
-    Girasol() : Productor(nombrePlanta::girasol, 300, 50, 49, 50, 1) {}
+    Girasol() : Productor(nombrePlanta::girasol,300, 50, 49, 50, 1) {}
 };
 
 class GirasolDoble : public Productor {
