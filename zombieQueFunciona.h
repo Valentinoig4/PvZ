@@ -21,9 +21,10 @@ public:
     int ticks = 0;
     bool congelado = false;
     int ticksParalizado = 0;
+    char ID{};
 
 
-    Zombie(int v, int vel, pair<int, int> ij) : vida(v), velocidad(vel), pos(std::move(ij)) {}
+    Zombie(int v, int vel, pair<int, int> ij, char _id) : vida(v), velocidad(vel), pos(std::move(ij)), ID(_id) {}
     virtual ~Zombie() = default;
 
     virtual void actuar()  {
@@ -84,25 +85,25 @@ public:
 
 class ZombieComun : public Zombie {
 public:
-    explicit ZombieComun(pair<int, int>ij) : Zombie(190, 5,ij) {}
+    explicit ZombieComun(pair<int, int>ij) : Zombie(190, 5,ij, 'Z') {}
 };
 
 
 class ZombieCubo : public Zombie {
 public:
-    explicit ZombieCubo(pair<int,int>ij) : Zombie(1290, 5,ij) {}
+    explicit ZombieCubo(pair<int,int>ij) : Zombie(1290, 5,ij, 'Q') {}
 };
 
 
 class ZombieCono : public Zombie {
 public:
-    explicit ZombieCono(pair<int, int> ij) : Zombie(560, 5, ij) {}
+    explicit ZombieCono(pair<int, int> ij) : Zombie(560, 5, ij, 'C') {}
 };
 
 
 class ZombieAtletico : public Zombie {
 public:
-    explicit ZombieAtletico(pair<int, int> ij) : Zombie(335, 3, ij) {
+    explicit ZombieAtletico(pair<int, int> ij) : Zombie(335, 3, ij, 'A') {
         especial = true;
     }
 
@@ -128,30 +129,19 @@ public:
 
 class ZombieGigante : public Zombie {
 public:
-
-    explicit ZombieGigante(pair<int, int> ij) : Zombie(3000, 2, ij) {
+    explicit ZombieGigante(pair<int, int> ij) : Zombie(3000, 2, ij, 'G') {
         danio = 5000;
         especial = true;
     }
-
-    pair<int,int> zombieLanzado;
-
-
 
     void actuar() override {
         if (!plantaEncima && ticksParalizado == 0) {
             pos.second--;
         }
-
-        if (especial && vida <= 1500) {
-            zombieLanzado.first = pos.first;
-            zombieLanzado.second = pos.second - 4;
-            if (zombieLanzado.second < 1) zombieLanzado.second = 1;
-
+        if (especial && vida <= 250) {
+            velocidad = 1;
             especial = false;
         }
-
-
         if (ticksParalizado > 0) {
             ticksParalizado--;
         }
@@ -160,7 +150,7 @@ public:
 
 class ZombiePeriodico : public Zombie {
 public:
-    explicit ZombiePeriodico(pair<int, int > ij) : Zombie(340, 5, ij) {
+    explicit ZombiePeriodico(pair<int, int > ij) : Zombie(340, 5, ij, 'P') {
         especial = true;
     }
 
@@ -186,3 +176,4 @@ public:
 
 
 #endif
+
