@@ -3,7 +3,6 @@
 
 #include "Jugador.h"
 #include "Oleada.h"
-#include "CPU.h"
 #include "Mapa.h"
 #include <iostream>
 #include <string>
@@ -13,31 +12,35 @@ class Juego {
 
 private:
     vector<Oleada> oleadas{};
-    Jugador jugador{};
     Mapa mapa{};
-    CPU cpu = CPU(&mapa);
     string historial{};
+    Jugador jugador = Jugador(&mapa, 300);
 
 public:
     Juego() {
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 4));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun, tipoZombie::Fortificado}, 3));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun, tipoZombie::Fortificado}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
-        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 2));
+        oleadas.emplace_back(Oleada({tipoZombie::Comun}, 3, 10, {"Lanzaguisantes"}));
+        oleadas[0].plantas.push_back(make_unique<LanzaGuisantes>());
     };
     ~Juego()=default;
 
-    void fasePlantas();
-    void faseZombies();
+    void fasePlantas(Oleada& oleada) {
+        jugador.fasePlantas(oleada);
+    };
+    void faseZombies(Oleada _oleada) {
+        mapa.aniadirOleada(_oleada);
+        mapa.runOleada();
+    };
 
     void iniciarJuego() {
-
+        int ronda = 0;
+        for ( auto& oleada: oleadas) {
+            ronda++;
+            cout << "------------------------------ RONDA " << ronda << " ------------------------------"<<  endl << endl;
+            cout << "FASE DE LAS PLANTAS:" << endl << endl;
+            fasePlantas(oleada);
+            cout << "ESTOY ACA AHORA EN FASE ZOMBIES" << endl;
+            faseZombies(oleada);
+        }
     }
 
     void iniciar() {
@@ -68,6 +71,8 @@ public:
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
                 }
+                cout << "------------------------------ Iniciando el juego ------------------------------" << endl << endl;
+                iniciarJuego();
             }
         }
     }
