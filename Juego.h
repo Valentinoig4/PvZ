@@ -6,11 +6,13 @@
 #include "Mapa.h"
 #include <iostream>
 #include <string>
-
+#include <fstream>
+#include <ctime>
 
 class Juego {
 
 private:
+    ofstream archivo;
     vector<Oleada> oleadas{};
     Mapa mapa{};
     string historial{};
@@ -41,6 +43,13 @@ public:
             cout << "ESTOY ACA AHORA EN FASE ZOMBIES" << endl;
             faseZombies(oleada);
         }
+        archivo<<"Nombre: "<<jugador.nombre<<endl;
+        archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
+        archivo<<"Zombies eliminados: "<<zombiesEliminados<<endl;
+        archivo<<"Soles generados: "<<solesGenerados<<endl;
+        archivo<<"Dano recibido: "<<dañoRecibido<<endl;
+        archivo<<"Puntos finales: "<<zombiesEliminados*30<<endl;
+        archivo.close();
     }
 
     void iniciar() {
@@ -70,6 +79,11 @@ public:
                 if (historial.empty()) {
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
+                    archivo.open(historial, ios::app);
+                    auto fecha = chrono::system_clock::now();
+                    time_t t = chrono::system_clock::to_time_t(fecha);
+                    tm *tiempoLocal = localtime(&t);
+                    archivo<<put_time(tiempoLocal,"%Y-%m-%d %H:%M:%S");
                 }
                 cout << "------------------------------ Iniciando el juego ------------------------------" << endl << endl;
                 iniciarJuego();
