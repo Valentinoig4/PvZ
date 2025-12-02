@@ -10,11 +10,12 @@
 #include "Mapa.h"
 #include <iostream>
 #include <string>
-
+#include <fstream>
 
 class Juego {
 
 private:
+    ofstream archivo;
     vector<Oleada> oleadas{};
     Mapa mapa{};
     string historial{};
@@ -55,7 +56,13 @@ public:
             puntosFinales += zombiesElimintados*3;
             if (rondaCompleta) {oleadasCompletadas++;}
             if (!rondaCompleta) {cout << jugador.nombre << " perdiste";break;}
-
+            archivo<<"Nombre: "<<jugador.nombre<<endl;
+            archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
+            archivo<<"Zombies eliminados: "<<mapa.zombiesEliminados<<endl;
+            archivo<<"Soles generados: "<<mapa.solesGenerados<<endl;
+            archivo<<"Dano recibido: "<<mapa.dañoRecibido<<endl;
+            archivo<<"Puntos finales: "<<mapa.zombiesEliminados*30<<endl;
+            archivo.close();
         }
     }
 
@@ -86,6 +93,11 @@ public:
                 if (historial.empty()) {
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
+                    archivo.open(historial);
+                    auto fecha = chrono::system_clock::now();
+                    time_t t = chrono::system_clock::to_time_t(fecha);
+                    tm *tiempoLocal = localtime(&t);
+                    archivo << put_time(tiempoLocal, "%Y-%m-%d %H:%M:%S") << endl;
                 }
                 cout << "------------------------------ Iniciando el juego ------------------------------" << endl << endl;
                 iniciarJuego();
