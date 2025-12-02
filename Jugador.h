@@ -19,15 +19,15 @@ public:
     Jugador(vector<Planta*> p, Mapa* mp, int s) : plantas(p), m(mp), soles(s) {}
     //Aca se le va a pedir al usuario que de una planta y en que lugar la quiere poner
     void pedirPlantas(Oleada* o) {
+        int numero=0, fila=0, columna=0, costo=0;
+        vector<string> pDisponibles = o->getPlantasDisponibles();
+        cout<<"ELIJA SUS PLANTAS:"<<endl;
+        cout<<"Plantas disponibles:"<<endl;
+        for (int i = 0; i < pDisponibles.size(); i++) {
+            cout<<i+1<<": "<<pDisponibles[i]<<" ";
+        }
+        cout<<endl;
         while (true) {
-            int numero=0, fila=0, columna=0, costo=0;
-            vector<string> pDisponibles = o->getPlantasDisponibles();
-            cout<<"ELIJA SUS PLANTAS:"<<endl;
-            cout<<"Plantas disponibles:"<<endl;
-            for (int i = 0; i < pDisponibles.size(); i++) {
-                cout<<i+1<<": "<<pDisponibles[i]<<" ";
-            }
-            cout<<endl;
             cout<<"Ingrese el numero de la planta: ";
             while (numero < 1 || numero > pDisponibles.size()) {
                 cin>>numero;
