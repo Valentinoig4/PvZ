@@ -189,6 +189,7 @@ public:
 
     void Enojar(){
         velocidad = 2; // se vuelve mas rapido
+        danio *= 2; // come mas rapido
         especial = false;
     }
 
@@ -201,4 +202,5 @@ public:
 };
 
 #endif
+
 
