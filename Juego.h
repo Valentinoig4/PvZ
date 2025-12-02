@@ -52,8 +52,8 @@ public:
             bool rondaCompleta = faseZombies(oleada);
             solesGenerados += mapa.solesGenerados;
             dañoRecibido += mapa.dañoRecibido;
-            zombiesElimintados += mapa.zombiesEliminados;
-            puntosFinales += zombiesElimintados*3;
+            zombiesEliminados += mapa.zombiesEliminados;
+            puntosFinales += zombiesEliminados*3;
             if (rondaCompleta) {oleadasCompletadas++;}
             if (!rondaCompleta) {cout << jugador.nombre << " perdiste";break;}
             archivo<<"Nombre: "<<jugador.nombre<<endl;
@@ -93,7 +93,7 @@ public:
                 if (historial.empty()) {
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
-                    archivo.open(historial);
+                    archivo.open(historial, ios::app);
                     auto fecha = chrono::system_clock::now();
                     time_t t = chrono::system_clock::to_time_t(fecha);
                     tm *tiempoLocal = localtime(&t);
