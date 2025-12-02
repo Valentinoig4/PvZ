@@ -55,9 +55,7 @@ public:
             }
             if (!m.ponerPlanta(pDisponibles[numero-1], fila-1, columna)) {
                 cout<<"Casilla ocupada"<<endl;
-                continue;
             }
-            break;
         }
     }
 };
