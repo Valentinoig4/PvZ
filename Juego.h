@@ -1,7 +1,3 @@
-//
-// Created by Rafael Chamayo on 28/11/25.
-//
-
 #ifndef JUEGO_H
 #define JUEGO_H
 
@@ -12,6 +8,7 @@
 #include <string>
 #include <fstream>
 
+
 class Juego {
 
 private:
@@ -21,7 +18,7 @@ private:
     string historial{};
     Jugador jugador = Jugador(&mapa, 300);
     int oleadasCompletadas{};
-    int zombiesEliminados{};
+    int zombiesElimintados{};
     int dañoRecibido{};
     int puntosFinales{};
     int solesGenerados{};
@@ -36,7 +33,7 @@ public:
     void fasePlantas(Oleada& oleada) {
         jugador.fasePlantas(oleada);
     };
-    bool faseZombies(Oleada _oleada) {
+    bool faseZombies(Oleada &_oleada) {
         mapa.aniadirOleada(_oleada);
         bool rondaCompleta = mapa.runOleada();
         return rondaCompleta;
@@ -52,21 +49,29 @@ public:
             bool rondaCompleta = faseZombies(oleada);
             solesGenerados += mapa.solesGenerados;
             dañoRecibido += mapa.dañoRecibido;
-            zombiesEliminados += mapa.zombiesEliminados;
-            puntosFinales += zombiesEliminados*3;
+            zombiesElimintados += mapa.zombiesEliminados;
+            puntosFinales += zombiesElimintados*3;
             if (rondaCompleta) {oleadasCompletadas++;}
             if (!rondaCompleta) {cout << jugador.nombre << " perdiste";break;}
-            archivo<<"Nombre: "<<jugador.nombre<<endl;
-            archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
-            archivo<<"Zombies eliminados: "<<zombiesEliminados<<endl;
-            archivo<<"Soles generados: "<<solesGenerados<<endl;
-            archivo<<"Dano recibido: "<<dañoRecibido<<endl;
-            archivo<<"Puntos finales: "<<zombiesEliminados*30<<endl;
-            archivo.close();
         }
+        archivo<<"Nombre: "<<jugador.nombre<<endl;
+        archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
+        archivo<<"Zombies eliminados: "<<zombiesElimintados<<endl;
+        archivo<<"Soles generados: "<<solesGenerados<<endl;
+        archivo<<"Dano recibido: "<<dañoRecibido<<endl;
+        archivo<<"Puntos finales: "<<zombiesElimintados*30<<endl;
+        auto fecha = chrono::system_clock::now();
+        time_t t = chrono::system_clock::to_time_t(fecha);
+        tm *tiempoLocal = localtime(&t);
+        archivo << put_time(tiempoLocal, "%Y-%m-%d %H:%M:%S") << endl;
+        archivo.close();
     }
 
     void iniciar() {
+        cout << "---------------- BIENVENIDO A PLANTAS VS ZOMBIES ----------------" << endl;
+        cout << "Cual es tu nombre: ";
+        cin >> jugador.nombre;
+        cout << endl;
         int opcion{2};
         while (abs(opcion-3)) {
             cout <<"SELECCIONAR UNA OPCION:" << endl;
@@ -84,6 +89,7 @@ public:
                 if (s.size() >= 5  && s.substr(s.size()-4, 7) == ".txt") {
                     historial = s;
                     cout << "se guardó: " << historial << endl << endl;;
+                    archivo.open(historial,ios::app);
                 } else {
                     cout << "Nombre de archivo no valido" << endl << endl;
                 }
@@ -94,13 +100,10 @@ public:
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
                     archivo.open(historial, ios::app);
-                    auto fecha = chrono::system_clock::now();
-                    time_t t = chrono::system_clock::to_time_t(fecha);
-                    tm *tiempoLocal = localtime(&t);
-                    archivo << put_time(tiempoLocal, "%Y-%m-%d %H:%M:%S") << endl;
                 }
                 cout << "------------------------------ Iniciando el juego ------------------------------" << endl << endl;
                 iniciarJuego();
+                break;
             }
         }
     }
