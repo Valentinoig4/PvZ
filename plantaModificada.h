@@ -27,7 +27,7 @@ public:
     nombrePlanta nombre{};
     Planta() = default;
     Planta(tipoPlanta t, nombrePlanta p, int v, int d, int c, int n) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p) {}
-    Planta(tipoPlanta t, nombrePlanta p,  v, int d, int c, int n, int a) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p), ataque(a) {}
+    Planta(tipoPlanta t, nombrePlanta p, int v, int d, int c, int n, int a) : vida(v), costo(c), nivel(n), demora(d), tipo(t), nombre(p), ataque(a) {}
     bool anadirTick() {
         ticks++;
         if (tipo != tipoPlanta::soporte && demora > 0)
