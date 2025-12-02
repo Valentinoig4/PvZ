@@ -146,7 +146,7 @@ public:
         if (especial && vida <= 1500) {
             zombieLanzado.first = pos.first;
             zombieLanzado.second = pos.second - 4;
-            if (zombieLanzado.second < 0) zombieLanzado.second = 0;
+            if (zombieLanzado.second < 1) zombieLanzado.second = 1;
 
             especial = false;
         }
@@ -158,7 +158,31 @@ public:
     };
 };
 
+class ZombiePeriodico : public Zombie {
+public:
+    explicit ZombiePeriodico(pair<int, int > ij) : Zombie(340, 5, ij) {
+        especial = true;
+    }
 
+    void Enojar(){
+        velocidad = 2; // se vuelve mas rapido
+        danio *= 2; // come mas rapido
+        especial = false;
+    }
+
+    void actuar() override {
+        if (vida <= 190) Enojar();
+        if (!plantaEncima && ticksParalizado == 0) {
+            pos.second--;
+            if (plantaCerca) {
+                plantaEncima = true;
+            }
+        }
+
+        if (ticksParalizado > 0) ticksParalizado--;
+
+    }
+};
 
 
 #endif
