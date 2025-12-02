@@ -5,7 +5,6 @@
 #include <string>
 #include <iostream>
 using namespace std;
-#include "Planta.h"
 #include "Oleada.h"
 #include "Mapa.h"
 
