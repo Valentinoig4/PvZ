@@ -1,3 +1,7 @@
+//
+// Created by Rafael Chamayo on 28/11/25.
+//
+
 #ifndef JUEGO_H
 #define JUEGO_H
 
@@ -6,31 +10,35 @@
 #include "Mapa.h"
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <ctime>
+
 
 class Juego {
 
 private:
-    ofstream archivo;
     vector<Oleada> oleadas{};
     Mapa mapa{};
     string historial{};
     Jugador jugador = Jugador(&mapa, 300);
+    int oleadasCompletadas{};
+    int zombiesElimintados{};
+    int dañoRecibido{};
+    int puntosFinales{};
+    int solesGenerados{};
 
 public:
     Juego() {
         oleadas.emplace_back(Oleada({tipoZombie::Comun}, 3, 10, {"Lanzaguisantes"}));
-        oleadas[0].plantas.push_back(make_unique<LanzaGuisantes>());
+        oleadas[0].plantas.push_back(new LanzaGuisantes);
     };
     ~Juego()=default;
 
     void fasePlantas(Oleada& oleada) {
         jugador.fasePlantas(oleada);
     };
-    void faseZombies(Oleada _oleada) {
+    bool faseZombies(Oleada _oleada) {
         mapa.aniadirOleada(_oleada);
-        mapa.runOleada();
+        bool rondaCompleta = mapa.runOleada();
+        return rondaCompleta;
     };
 
     void iniciarJuego() {
@@ -40,16 +48,15 @@ public:
             cout << "------------------------------ RONDA " << ronda << " ------------------------------"<<  endl << endl;
             cout << "FASE DE LAS PLANTAS:" << endl << endl;
             fasePlantas(oleada);
-            cout << "ESTOY ACA AHORA EN FASE ZOMBIES" << endl;
-            faseZombies(oleada);
+            bool rondaCompleta = faseZombies(oleada);
+            solesGenerados += mapa.solesGenerados;
+            dañoRecibido += mapa.dañoRecibido;
+            zombiesElimintados += mapa.zombiesEliminados;
+            puntosFinales += zombiesElimintados*3;
+            if (rondaCompleta) {oleadasCompletadas++;}
+            if (!rondaCompleta) {cout << jugador.nombre << " perdiste";break;}
+
         }
-        archivo<<"Nombre: "<<jugador.nombre<<endl;
-        archivo<<"Oleadas completadas: "<<oleadasCompletadas<<endl;
-        archivo<<"Zombies eliminados: "<<zombiesEliminados<<endl;
-        archivo<<"Soles generados: "<<solesGenerados<<endl;
-        archivo<<"Dano recibido: "<<dañoRecibido<<endl;
-        archivo<<"Puntos finales: "<<zombiesEliminados*30<<endl;
-        archivo.close();
     }
 
     void iniciar() {
@@ -79,11 +86,6 @@ public:
                 if (historial.empty()) {
                     cout << "Se creará un historial con el nombre: HistorialPVZ.txt" << endl;
                     historial = "HistorialPVZ.txt";
-                    archivo.open(historial, ios::app);
-                    auto fecha = chrono::system_clock::now();
-                    time_t t = chrono::system_clock::to_time_t(fecha);
-                    tm *tiempoLocal = localtime(&t);
-                    archivo<<put_time(tiempoLocal,"%Y-%m-%d %H:%M:%S");
                 }
                 cout << "------------------------------ Iniciando el juego ------------------------------" << endl << endl;
                 iniciarJuego();
