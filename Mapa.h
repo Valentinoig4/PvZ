@@ -1,3 +1,7 @@
+//
+// Created by Rafael Chamayo on 29/11/25.
+//
+
 #ifndef MAPA_H
 #define MAPA_H
 
@@ -41,9 +45,11 @@ class Mapa {
 public:
     vector<vector<Celda>> grilla;
     Oleada oleada{};
-    int recursosGenerados{};
+    int solesGenerados{};
     int zombiesUtilizados{};
     int ticks{};
+    int zombiesEliminados{};
+    int dañoRecibido{};
 
     // --------------- CONSTRUCTOR ------------------
 
@@ -186,7 +192,7 @@ public:
                 if (j.planta != nullptr) {
                     if (j.planta->tipo == tipoPlanta::productor) {
                         if (j.planta->anadirTick()) {
-                            recursosGenerados+= j.planta->habilidadPasiva();
+                            solesGenerados+= j.planta->habilidadPasiva();
                         }
                     }
                 }
@@ -243,19 +249,21 @@ public:
                     for (int z = 0; z < grilla[i][j].zombies.size();) {
                         if (grilla[i][j].zombies[z]->getVida()== 0) {
                             grilla[i][j].zombies.erase(grilla[i][j].zombies.begin() + z);
+                            zombiesEliminados++;
                         } else {
                             z++;
                         }
                     }
                 }
 
-                if (grilla[i][j].planta != nullptr) {
+                if (grilla[i][j].planta != nullptr) { // PLANTA RECIBE DAÑO
                     if (!grilla[i][j].zombies.empty()) {
                         int dmg{};
                         for (int z = 0; z < grilla[i][j].zombies.size();z++) {
                             dmg += grilla[i][j].zombies[z]->danio;
                         }
                         *grilla[i][j].planta -= dmg;
+                        dañoRecibido+= dmg;
                         if (grilla[i][j].planta->getVida() == 0) {
                             grilla[i][j].planta.reset();
                         }
