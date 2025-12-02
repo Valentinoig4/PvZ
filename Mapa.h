@@ -1,7 +1,3 @@
-//
-// Created by Rafael Chamayo on 29/11/25.
-//
-
 #ifndef MAPA_H
 #define MAPA_H
 
@@ -17,6 +13,16 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <cstdlib>
+
+
+inline void clearScreen() {
+#ifdef _WIN32
+    std::system("cls");   // Windows
+#else
+    std::system("clear"); // macOS / Linux
+#endif
+}
 using namespace std;
 
 class Celda {
@@ -42,9 +48,9 @@ public:
     // --------------- CONSTRUCTOR ------------------
 
     Mapa() {
-        grilla.resize(6);
+        grilla.resize(5);
         for (auto &fila: grilla) {
-            fila.resize(9);
+            fila.resize(10);
         }
 
     }
@@ -59,23 +65,25 @@ public:
 
     // AÑADIR UN ZOMBIE ALEATORIAMENTE
     void randZombie() {
-        random_device rd;
-        unsigned int numZombie = rd() % oleada.zombies.size();
-        tipoZombie zombie = oleada.zombies[numZombie];
-        unsigned int filaRand = rd() % grilla.size();
+        if (zombiesUtilizados <= oleada.cantZombies) {
+            random_device rd;
+            unsigned int numZombie = rd() % oleada.zombies.size();
+            tipoZombie zombie = oleada.zombies[numZombie];
+            unsigned int filaRand = rd() % grilla.size();
 
-        if (zombie == tipoZombie::Comun) {
-            grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieComun>(pair<int, int>(filaRand, 8)));
-        } else if (zombie == tipoZombie::Cono) {
-            grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieCono>(pair<int, int>(filaRand, 8)));
-        } else if (zombie == tipoZombie::Cubo) {
-            grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieCubo>(pair<int, int>(filaRand, 8)));
-        } else if (zombie == tipoZombie::Atletico) {
-            grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieAtletico>(pair<int, int>(filaRand, 8)));
-        } else {
-            grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieGigante>(pair<int, int>(filaRand, 8)));
+            if (zombie == tipoZombie::Comun) {
+                grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieComun>(pair<int, int>(filaRand, 8)));
+            } else if (zombie == tipoZombie::Cono) {
+                grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieCono>(pair<int, int>(filaRand, 8)));
+            } else if (zombie == tipoZombie::Cubo) {
+                grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieCubo>(pair<int, int>(filaRand, 8)));
+            } else if (zombie == tipoZombie::Atletico) {
+                grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieAtletico>(pair<int, int>(filaRand, 8)));
+            } else {
+                grilla[filaRand][8].zombies.push_back(std::make_unique<ZombieGigante>(pair<int, int>(filaRand, 8)));
+            }
+            zombiesUtilizados++;
         }
-        zombiesUtilizados++;
     }
 
     // AÑADIR UN ZOMBIE DE ACUERDO A LA VELOCIDAD DE SPAWNEO
@@ -120,6 +128,17 @@ public:
             return true;
         }
 
+    }
+
+    // ELIMINAR PLANTA
+
+    bool eliminarPlanta(int fila, int col) {
+        if (grilla[fila][col].planta != nullptr) {
+            grilla[fila][col].planta.reset();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // VERIFICAR SI YA SE USARON TODOS LOS ZOMBIES Y YA NO HAY EN EL MAPA
@@ -194,12 +213,12 @@ public:
 
         // MOVIMIENTO ZOMBIES
 
-        for (int i = 1; i < grilla.size(); i++) {
-            for (int j = 0; j < grilla[i].size(); j++) {
+        for (int i = 0; i < grilla.size(); i++) {
+            for (int j = 1; j < grilla[i].size(); j++) {
                 if (!grilla[i][j].zombies.empty()) {
                     for (int z = 0; z < grilla[i][j].zombies.size();) {
                         if (grilla[i][j].zombies[z]->anadirTick()) {
-                            if (grilla[i][j].planta != nullptr) {grilla[i][j].zombies[z]->plantaCerca = true;}
+                            if (grilla[i][j-1].planta != nullptr) {grilla[i][j].zombies[z]->plantaCerca = true;}
                             grilla[i][j].zombies[z]->actuar();
                             int newcol = grilla[i][j].zombies[z]->getPos().second;
                             if (newcol != j) {
@@ -271,15 +290,16 @@ public:
     bool runOleada() {
         bool completaOleada = true;
         while (oleadaIncompleta()) {
+            clearScreen();
             this_thread::sleep_for(chrono::milliseconds(1000));
             tickZombie();
 
             bool perdioJuego = this->runTurno();
+            imprimir();
             if (perdioJuego) {
                 completaOleada = false;
                 break;
             }
-            imprimir();
         }
         return completaOleada;
     }
